@@ -1,0 +1,3 @@
+[submodule "VTSLuaController/webSocket"]
+	path = VTSLuaController/webSocket
+	url = https://github.com/Ganeesya/VTS-Sharp.git
