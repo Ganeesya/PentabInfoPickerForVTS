@@ -183,7 +183,7 @@ namespace VTSPentabPlugin
             this.TestFps.Name = "TestFps";
             this.TestFps.Size = new System.Drawing.Size(100, 23);
             this.TestFps.TabIndex = 0;
-            this.TestFps.Text = "10";
+            this.TestFps.Text = "60";
             this.TestFps.TextChanged += new System.EventHandler(this.fpsBox_TextChanged);
             this.TestFps.Validating += new System.ComponentModel.CancelEventHandler(this.TestFps_Validating);
             // 
@@ -235,7 +235,7 @@ namespace VTSPentabPlugin
             this.groupBox1.Size = new System.Drawing.Size(503, 276);
             this.groupBox1.TabIndex = 14;
             this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "groupBox1";
+            this.groupBox1.Text = "Tablet Info";
             // 
             // presserRewBox
             // 

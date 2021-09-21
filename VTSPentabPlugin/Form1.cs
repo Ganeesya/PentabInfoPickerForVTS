@@ -144,7 +144,7 @@ namespace VTSPentabPlugin
 
         public float value = 0f;
 
-        public float sendWeight = 0.8f;
+        public float sendWeight = 1f;
 
         public InjectionInfo(string _name, string _explanation)
         {
