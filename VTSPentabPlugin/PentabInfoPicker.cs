@@ -370,7 +370,7 @@ namespace VTSPentabPlugin
 
         public void Close()
         {
-            m_Thread.Interrupt();
+			if(m_Thread != null) m_Thread.Interrupt();
             foreach (HIDevice e in m_deviceList)
             {
                 CloseHandle(e.handle);
