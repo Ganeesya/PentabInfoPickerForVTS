@@ -18,7 +18,6 @@ namespace VTSPentabPlugin
             var first = new DeviceData("Wacom:Cintq13HD", 0x56A, 0x0A, 0xff00);
             comboBox1.Items.Add(first);
             comboBox1.SelectedItem = first;
-            _pentab.Init(first.VenderId, first.Usage, first.UsagePage);
         }
 
         private void timer1_Tick(object sender, EventArgs e)

@@ -377,7 +377,7 @@ namespace VTSPentabPlugin
             this.presserMaxBox.Name = "presserMaxBox";
             this.presserMaxBox.Size = new System.Drawing.Size(100, 23);
             this.presserMaxBox.TabIndex = 10;
-            this.presserMaxBox.Text = "0";
+            this.presserMaxBox.Text = "1";
             this.presserMaxBox.Validating += new System.ComponentModel.CancelEventHandler(this.presserMaxBox_Validating);
             // 
             // label8
@@ -422,7 +422,7 @@ namespace VTSPentabPlugin
             this.positionYMaxBox.Name = "positionYMaxBox";
             this.positionYMaxBox.Size = new System.Drawing.Size(100, 23);
             this.positionYMaxBox.TabIndex = 10;
-            this.positionYMaxBox.Text = "0";
+            this.positionYMaxBox.Text = "1";
             this.positionYMaxBox.Validating += new System.ComponentModel.CancelEventHandler(this.positionYMaxBox_Validating);
             // 
             // tiltXMaxBox
@@ -449,7 +449,7 @@ namespace VTSPentabPlugin
             this.positionXMaxBox.Name = "positionXMaxBox";
             this.positionXMaxBox.Size = new System.Drawing.Size(100, 23);
             this.positionXMaxBox.TabIndex = 10;
-            this.positionXMaxBox.Text = "0";
+            this.positionXMaxBox.Text = "1";
             this.positionXMaxBox.Validating += new System.ComponentModel.CancelEventHandler(this.positionXMaxBox_Validating);
             // 
             // textBox2

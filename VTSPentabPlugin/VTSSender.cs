@@ -73,7 +73,7 @@ namespace VTSPentabPlugin
             InjectParameterValues(array,
                 (r) =>
                 {
-                    Debug.Print($"Injection is Safe");
+                    // Debug.Print($"Injection is Safe");
                 },
                 (e) =>
                 {

@@ -360,9 +360,12 @@ namespace VTSPentabPlugin
 			}
 
             if (m_deviceList.Count == 0)
+            {
                 return false;
+            }
 
-			m_Thread = new Thread(new ThreadStart(getThread));
+            dead = false;
+            m_Thread = new Thread(new ThreadStart(getThread));
 			m_Thread.Start();
 
             return true;
