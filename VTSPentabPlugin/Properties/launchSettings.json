@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "VTSPentabPlugin": {
+      "commandName": "Project",
+      "nativeDebugging": true
+    }
+  }
+}
