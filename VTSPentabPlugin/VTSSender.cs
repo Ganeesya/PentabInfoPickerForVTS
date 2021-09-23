@@ -85,7 +85,15 @@ namespace VTSPentabPlugin
         {
             while (true)
             {
-                await Task.Run(Socket.Update);
+                try
+                {
+                    await Task.Run(Socket.Update);
+                }
+                catch (Exception e)
+                {
+
+                    Debug.Print(e.Message);
+                }
             }
         }
 
