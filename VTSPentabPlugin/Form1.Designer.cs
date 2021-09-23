@@ -395,7 +395,7 @@ namespace VTSPentabPlugin
             this.tiltYMaxBox.Name = "tiltYMaxBox";
             this.tiltYMaxBox.Size = new System.Drawing.Size(100, 23);
             this.tiltYMaxBox.TabIndex = 10;
-            this.tiltYMaxBox.Text = "120";
+            this.tiltYMaxBox.Text = "128";
             this.tiltYMaxBox.Validating += new System.ComponentModel.CancelEventHandler(this.tiltYMaxBox_Validating);
             // 
             // label13
@@ -431,7 +431,7 @@ namespace VTSPentabPlugin
             this.tiltXMaxBox.Name = "tiltXMaxBox";
             this.tiltXMaxBox.Size = new System.Drawing.Size(100, 23);
             this.tiltXMaxBox.TabIndex = 10;
-            this.tiltXMaxBox.Text = "120";
+            this.tiltXMaxBox.Text = "128";
             this.tiltXMaxBox.Validating += new System.ComponentModel.CancelEventHandler(this.tiltXMaxBox_Validating);
             // 
             // label12
