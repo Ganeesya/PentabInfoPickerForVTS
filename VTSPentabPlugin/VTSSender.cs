@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using VTS;
-using VTS.Models;
 using VTS.Models.Impl;
 using VTS.Networking;
 using VTS.Networking.Impl;
@@ -28,7 +26,14 @@ namespace VTSPentabPlugin
         {
             this._pluginAuthor = "Ganeesya";
             this._pluginName = "Pentab";
-            this.Initialize(new VTSWebSocket(), new WebSocketImpl(), new JsonUtilityImpl());
+            this.Initialize(
+                new VTSWebSocket(),
+                new WebSocketImpl(),
+                new JsonUtilityImpl(),
+                new TokenStorageImpl(),
+                ()=>{},
+                ()=>{},
+                ()=>{});
             _updateThread = new Thread(SocketUpdate);
             _updateThread.Start();
 
@@ -44,7 +49,7 @@ namespace VTSPentabPlugin
 
         public async void RegistrationCustomInput()
         {
-            while (AuthenticationToken == null)
+            while (!IsAuthenticated)
             {
                 await Task.Delay(10);
             }
@@ -65,7 +70,7 @@ namespace VTSPentabPlugin
 
         public void SendCustomInput()
         {
-            if( AuthenticationToken == null ) return;
+            if( !IsAuthenticated ) return;
 
             var array =
                 _sendList.ConvertAll((ele) => { return ele.ConvertInjectionValue(); }).ToArray();
