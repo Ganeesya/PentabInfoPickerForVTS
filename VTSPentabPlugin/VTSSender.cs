@@ -92,13 +92,13 @@ namespace VTSPentabPlugin
             {
                 try
                 {
-                    await Task.Run(Socket.Update);
+                    Socket.Update();
                 }
                 catch (Exception e)
                 {
-
                     Debug.Print(e.Message);
                 }
+                await Task.Delay(2);
             }
         }
 
