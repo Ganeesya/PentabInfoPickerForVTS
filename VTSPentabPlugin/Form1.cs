@@ -30,6 +30,8 @@ namespace VTSPentabPlugin
             tiltXRewBox.Text = currentPentabInfo.tiltX.ToString();
             tiltYRewBox.Text = currentPentabInfo.tiltY.ToString();
             presserRewBox.Text = currentPentabInfo.presser.ToString();
+            buttonsText.Text = currentPentabInfo.GetButtonText();
+            rawDataText.Text = currentPentabInfo.rawData;
 
             if (currentPentabInfo.pointX > int.Parse(positionXMaxBox.Text))
             {
@@ -62,6 +64,10 @@ namespace VTSPentabPlugin
             _sender._tiltX.UpdateValue(currentPentabInfo.tiltX, int.Parse(tiltXMaxBox.Text));
             _sender._tiltY.UpdateValue(currentPentabInfo.tiltY, int.Parse(tiltYMaxBox.Text));
             _sender._pre.UpdateValue(currentPentabInfo.presser, int.Parse(presserMaxBox.Text));
+            for (int i = 0; i < 9; i++)
+            {
+                _sender._buttons[i].UpdateValue( currentPentabInfo.buttens[i], 1 );
+            }
 
             _sender.SendCustomInput();
 

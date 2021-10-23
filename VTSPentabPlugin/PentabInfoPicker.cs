@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
@@ -21,6 +22,7 @@ namespace VTSPentabPlugin
             public bool isOnTab = false;
 
 			public int[] buttens = new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+			public bool[] sideButtions = new bool[2];
 
 			public int getEventCode(byte[] buff) => (int)(buff[1] << 8) + (int)buff[2];
 			private int getPointX(byte[] buff) => ((int)(buff[3] & 0x7f) << 8) + (int)buff[4];
@@ -29,6 +31,8 @@ namespace VTSPentabPlugin
 
 			private int getTiltX(byte[] buff) => ((int)(buff[8] & 0x3f) << 1) + (int)((buff[9] & 0x80) >> 7);
 			private int getTiltY(byte[] buff) => (int)(buff[9] & 0x7f);
+
+			public string rawData = "";
 
 			public void checkGetters(byte[] buff)
 			{
@@ -69,6 +73,11 @@ namespace VTSPentabPlugin
 				buttens[8] = (int)((buff[4]) & 1);
 			}
 
+			public void updateSideButtons(byte[] buff)
+			{
+				
+			}
+
 			public void updatePoints(byte[] buff)
 			{
 				lock (this)
@@ -105,7 +114,20 @@ namespace VTSPentabPlugin
                 ret.presser = presser;
                 ret.tiltX = tiltX;
                 ret.tiltY = tiltY;
+                buttens.CopyTo(ret.buttens,0);
+                ret.rawData = rawData;
                 return ret;
+            }
+            
+            public string GetButtonText()
+            {
+	            string ret = "";
+	            for (int i = 0; i < 9; i++)
+	            {
+		            ret += $"{i}:{buttens[i]} ";
+	            }
+
+	            return ret;
             }
         }
 		class HIDevice
@@ -466,6 +488,12 @@ namespace VTSPentabPlugin
 							    //pentabInfo.checkGetters(buff);
 							    break;
 					    }
+
+					    pentabInfo.rawData = 
+						    string.Join(
+							    " | ",
+							    buff.Select(x=>Convert.ToString(x,2).PadLeft(8,'0'))
+							    );
                     }
 				}
 			}
