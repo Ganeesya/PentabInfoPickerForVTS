@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
 using System.Threading;
 
 namespace VTSPentabPlugin
@@ -24,7 +23,7 @@ namespace VTSPentabPlugin
 			public int[] buttens = new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 			public bool[] sideButtions = new bool[2];
 
-			public int getEventCode(byte[] buff) => (int)(buff[1] << 8) + (int)buff[2];
+			public int getEventCode(byte[] buff) => (int)(buff[1] << 8) + (int)(buff[2] & 0xE0 );
 			private int getPointX(byte[] buff) => ((int)(buff[3] & 0x7f) << 8) + (int)buff[4];
 			private int getPointY(byte[] buff) => ((int)(buff[5] & 0x7f) << 8) + (int)buff[6];
 			private int getPresser(byte[] buff) => ((int)(buff[7]) << 2) + (int)((buff[8] & 0xc0) >> 6);
@@ -54,7 +53,7 @@ namespace VTSPentabPlugin
 			public void updateTouch(byte[] buff)
 			{
 				int eventCode = getEventCode(buff);
-				if (eventCode == 706)
+				if (eventCode == 704)
 				{
 					isOnTab = true;
 				}
@@ -75,7 +74,8 @@ namespace VTSPentabPlugin
 
 			public void updateSideButtons(byte[] buff)
 			{
-				
+				sideButtions[0] = (buff[2] & 0b10) == 0b10;
+				sideButtions[1] = (buff[2] & 0b100) == 0b100;
 			}
 
 			public void updatePoints(byte[] buff)
@@ -116,6 +116,7 @@ namespace VTSPentabPlugin
                 ret.tiltY = tiltY;
                 buttens.CopyTo(ret.buttens,0);
                 ret.rawData = rawData;
+                sideButtions.CopyTo(ret.sideButtions,0);
                 return ret;
             }
             
@@ -126,6 +127,8 @@ namespace VTSPentabPlugin
 	            {
 		            ret += $"{i}:{buttens[i]} ";
 	            }
+
+	            ret += $" sideUnder:{(sideButtions[0]?1:0)} sideUpper:{(sideButtions[1]?1:0)}";
 
 	            return ret;
             }
@@ -453,23 +456,23 @@ namespace VTSPentabPlugin
                         int eventCode = pentabInfo.getEventCode(buff);
 					    switch (eventCode)
 					    {
-						    case 544:
+						    case 544://10 0010 0000
 							    pentabInfo.updatePoints(buff);
 							    break;
-						    case 736:
-						    case 737:
+						    case 736://10 1110 0000
 							    pentabInfo.updatePoints(buff);
 							    pentabInfo.updatePresser(buff);
 							    pentabInfo.updateTilt(buff);
+							    pentabInfo.updateSideButtons(buff);
 							    break;
-						    case 706:
-						    case 640:
+						    case 704://10 1100 0000
+						    case 640://10 1000 0000
 							    pentabInfo.updateTouch(buff);
 							    break;
-						    case 896:
+						    case 896://11 1000 0000
 							    pentabInfo.updateButtons(buff);
 							    break;
-						    case 49152:
+						    case 49152://1100 0000 0000 0000
 							    break;
 						    default:
 							    //                     string result = "eve =";
@@ -494,6 +497,7 @@ namespace VTSPentabPlugin
 							    " | ",
 							    buff.Select(x=>Convert.ToString(x,2).PadLeft(8,'0'))
 							    );
+					    // Console.WriteLine(pentabInfo.rawData);
                     }
 				}
 			}

@@ -22,6 +22,8 @@ namespace VTSPentabPlugin
         public InjectionInfo _tiltY;
         public InjectionInfo _pre;
         public InjectionInfo[] _buttons;
+        public InjectionInfo _underSideButton;
+        public InjectionInfo _upperSideButton;
 
         private static int buttonCount = 9;
 
@@ -52,6 +54,8 @@ namespace VTSPentabPlugin
             {
                 _buttons[i] = new InjectionInfo($"PentabButton{i}", $"Retuns the pentab button{i} down.");
             }
+            _sendList.Add(_underSideButton = new InjectionInfo("PentabUnderSideButton", "Returns the pen side button under down."));
+            _sendList.Add(_upperSideButton = new InjectionInfo("PentabUpperSideButton", "Returns the pen side button upper down."));
 
             RegistrationCustomInput();
         }
