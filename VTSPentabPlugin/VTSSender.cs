@@ -53,6 +53,7 @@ namespace VTSPentabPlugin
             for (int i = 0; i < buttonCount; i++)
             {
                 _buttons[i] = new InjectionInfo($"PentabButton{i}", $"Retuns the pentab button{i} down.");
+                _sendList.Add(_buttons[i]);
             }
             _sendList.Add(_underSideButton = new InjectionInfo("PentabUnderSideButton", "Returns the pen side button under down."));
             _sendList.Add(_upperSideButton = new InjectionInfo("PentabUpperSideButton", "Returns the pen side button upper down."));
