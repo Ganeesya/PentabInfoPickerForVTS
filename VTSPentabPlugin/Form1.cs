@@ -68,6 +68,9 @@ namespace VTSPentabPlugin
             {
                 _sender._buttons[i].UpdateValue( currentPentabInfo.buttens[i], 1 );
             }
+            
+            _sender._underSideButton.UpdateValue( currentPentabInfo.sideButtions[0] ?1 : 0,1);
+            _sender._upperSideButton.UpdateValue( currentPentabInfo.sideButtions[1] ?1 : 0,1);
 
             _sender.SendCustomInput();
 
