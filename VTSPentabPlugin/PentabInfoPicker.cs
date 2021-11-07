@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace VTSPentabPlugin
 {
@@ -80,28 +81,19 @@ namespace VTSPentabPlugin
 
 			public void updatePoints(byte[] buff)
 			{
-				lock (this)
-				{
-					pointX = getPointX(buff);
-					pointY = getPointY(buff);
-				}
+				pointX = getPointX(buff);
+				pointY = getPointY(buff);
 			}
 
 			public void updatePresser(byte[] buff)
 			{
-				lock (this)
-				{
-					presser = getPresser(buff);
-				}
+				presser = getPresser(buff);
 			}
 
 			public void updateTilt(byte[] buff)
 			{
-				lock (this)
-				{
-					tiltX = getTiltX(buff);
-					tiltY = getTiltY(buff);
-				}
+				tiltX = getTiltX(buff);
+				tiltY = getTiltY(buff);
 			}
 
             public PentabInfo Clone()
@@ -317,7 +309,7 @@ namespace VTSPentabPlugin
 
         List<HIDevice> m_deviceList = new List<HIDevice>();
         int m_select = 0;
-        Thread m_Thread;
+        private CancellationTokenSource cancelSource;
         bool dead = false;
 
         PentabInfo pentabInfo = new PentabInfo();
@@ -390,15 +382,15 @@ namespace VTSPentabPlugin
             }
 
             dead = false;
-            m_Thread = new Thread(new ThreadStart(getThread));
-			m_Thread.Start();
+			cancelSource = new CancellationTokenSource();
+			Task.Run(gettingTask,cancelSource.Token);
 
             return true;
         }
 
         public void Close()
         {
-			if(m_Thread != null) m_Thread.Interrupt();
+			if(cancelSource != null) cancelSource.Cancel();
             foreach (HIDevice e in m_deviceList)
             {
                 CloseHandle(e.handle);
@@ -406,7 +398,7 @@ namespace VTSPentabPlugin
             dead = true;
 		}
 
-        private void getThread()
+        private async void gettingTask()
 		{
 			try
 			{
@@ -449,57 +441,55 @@ namespace VTSPentabPlugin
 							return;
 						}
 
+						Task.Delay(1);
 					}
 
-                    lock (pentabInfo)
-                    {
-                        int eventCode = pentabInfo.getEventCode(buff);
-					    switch (eventCode)
-					    {
-						    case 544://10 0010 0000
-							    pentabInfo.updatePoints(buff);
-							    break;
-						    case 736://10 1110 0000
-							    pentabInfo.updatePoints(buff);
-							    pentabInfo.updatePresser(buff);
-							    pentabInfo.updateTilt(buff);
-							    pentabInfo.updateSideButtons(buff);
-							    break;
-						    case 704://10 1100 0000
-						    case 640://10 1000 0000
-							    pentabInfo.updateTouch(buff);
-							    break;
-						    case 896://11 1000 0000
-							    pentabInfo.updateButtons(buff);
-							    break;
-						    case 49152://1100 0000 0000 0000
-							    break;
-						    default:
-							    //                     string result = "eve =";
-							    //                     result = eventCode + " ,data={";
-							    //                     int i = 0;
+                    int eventCode = pentabInfo.getEventCode(buff);
+				    switch (eventCode)
+				    {
+					    case 544://10 0010 0000
+						    pentabInfo.updatePoints(buff);
+						    break;
+					    case 736://10 1110 0000
+						    pentabInfo.updatePoints(buff);
+						    pentabInfo.updatePresser(buff);
+						    pentabInfo.updateTilt(buff);
+						    pentabInfo.updateSideButtons(buff);
+						    break;
+					    case 704://10 1100 0000
+					    case 640://10 1000 0000
+						    pentabInfo.updateTouch(buff);
+						    break;
+					    case 896://11 1000 0000
+						    pentabInfo.updateButtons(buff);
+						    break;
+					    case 49152://1100 0000 0000 0000
+						    break;
+					    default:
+						    //                     string result = "eve =";
+						    //                     result = eventCode + " ,data={";
+						    //                     int i = 0;
 
-							    //                     foreach (byte e in (byte[])buff)
-							    //                     {
-							    //                         result += i.ToString() + ":" + Convert.ToString(e, 2).PadLeft(8, '0') + ",";
-							    //                         i++;
-							    //                     }
-							    //                     result = result.Remove(result.Length - 1);
-							    //                     result += "}";
+						    //                     foreach (byte e in (byte[])buff)
+						    //                     {
+						    //                         result += i.ToString() + ":" + Convert.ToString(e, 2).PadLeft(8, '0') + ",";
+						    //                         i++;
+						    //                     }
+						    //                     result = result.Remove(result.Length - 1);
+						    //                     result += "}";
 
-							    //                     System.Diagnostics.Debug.Print(result);
-							    //pentabInfo.checkGetters(buff);
-							    break;
-					    }
+						    //                     System.Diagnostics.Debug.Print(result);
+						    //pentabInfo.checkGetters(buff);
+						    break;
+				    }
 
-					    pentabInfo.rawData = 
-						    string.Join(
-							    " | ",
-							    buff.Select(x=>Convert.ToString(x,2).PadLeft(8,'0'))
-							    );
-					    // Console.WriteLine(pentabInfo.rawData);
-                    }
-				}
+				    pentabInfo.rawData = 
+					    string.Join(
+						    " | ",
+						    buff.Select(x=>Convert.ToString(x,2).PadLeft(8,'0'))
+						    );
+				    // Console.WriteLine(pentabInfo.rawData);
+                }
 			}
 			catch (ThreadAbortException e)
 			{
@@ -509,10 +499,7 @@ namespace VTSPentabPlugin
 
         public PentabInfo GetState()
         {
-            lock (pentabInfo)
-            {
-                return pentabInfo.Clone();
-            }
+            return pentabInfo.Clone();
         }
 	}
 }

@@ -12,7 +12,7 @@ namespace VTSPentabPlugin
 {
     class VTSSender : VTSPlugin
     {
-        private readonly Thread _updateThread;
+        private CancellationTokenSource cancelSource;
 
         private List<InjectionInfo> _sendList = new List<InjectionInfo>();
         public InjectionInfo _onTable;
@@ -39,8 +39,8 @@ namespace VTSPentabPlugin
                 ()=>{},
                 ()=>{},
                 ()=>{});
-            _updateThread = new Thread(SocketUpdate);
-            _updateThread.Start();
+            cancelSource = new CancellationTokenSource();
+            Task.Run(SocketUpdate, cancelSource.Token);
 
             _sendList.Add(_onTable = new InjectionInfo("PentabOnTable", "If the pen is on the tablet, return 1."));
             _sendList.Add(_posX = new InjectionInfo("PentabPositionX", "Returns the horizontal position of the pen on the tablet."));
@@ -118,7 +118,7 @@ namespace VTSPentabPlugin
 
         public void Close()
         {
-            this._updateThread.Interrupt();
+            cancelSource.Cancel();
             this.Socket.Close();
         }
     }
