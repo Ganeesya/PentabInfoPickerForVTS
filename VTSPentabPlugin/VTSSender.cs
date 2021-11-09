@@ -100,19 +100,23 @@ namespace VTSPentabPlugin
                 });
         }
 
-        private async void SocketUpdate()
+        private async Task SocketUpdate()
         {
-            while (true)
+            try
             {
-                try
+                while (true)
                 {
                     Socket.Update();
+                    await Task.Delay(2);
                 }
-                catch (Exception e)
-                {
-                    Debug.Print(e.Message);
-                }
-                await Task.Delay(2);
+            }
+            catch (Exception e)
+            {
+                Debug.Print(e.Message);
+            }
+            catch
+            {
+                Debug.Print("cant catch exception");
             }
         }
 

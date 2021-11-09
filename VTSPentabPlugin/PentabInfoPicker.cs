@@ -398,7 +398,7 @@ namespace VTSPentabPlugin
             dead = true;
 		}
 
-        private async void gettingTask()
+        private async Task gettingTask()
 		{
 			try
 			{
@@ -441,7 +441,7 @@ namespace VTSPentabPlugin
 							return;
 						}
 
-						Task.Delay(1);
+						await Task.Delay(1);
 					}
 
                     int eventCode = pentabInfo.getEventCode(buff);
@@ -491,10 +491,7 @@ namespace VTSPentabPlugin
 				    // Console.WriteLine(pentabInfo.rawData);
                 }
 			}
-			catch (ThreadAbortException e)
-			{
-
-			}
+			catch { }
 		}
 
         public PentabInfo GetState()
