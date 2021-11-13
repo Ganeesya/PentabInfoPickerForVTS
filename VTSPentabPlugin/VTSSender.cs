@@ -114,10 +114,6 @@ namespace VTSPentabPlugin
             {
                 Debug.Print(e.Message);
             }
-            catch
-            {
-                Debug.Print("cant catch exception");
-            }
         }
 
         public void Close()
