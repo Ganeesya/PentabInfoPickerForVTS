@@ -8,4 +8,8 @@
     <PackageVersion>1.0.1</PackageVersion>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="hidlibrary" Version="3.3.40" />
+  </ItemGroup>
+
 </Project>

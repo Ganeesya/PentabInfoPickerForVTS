@@ -15,7 +15,7 @@ namespace VTSPentabPlugin
         public Form1()
         {
             InitializeComponent();
-            var first = new DeviceData("Wacom:Cintq13HD", 0x56A, 0x0A, 0xff00);
+            var first = new DeviceData("Wacom:Cintq13HD", 0x56A, 0x0A, -256);
             comboBox1.Items.Add(first);
             comboBox1.SelectedItem = first;
         }
